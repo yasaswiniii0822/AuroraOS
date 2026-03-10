@@ -2,23 +2,34 @@
 bits 16
 
 start:
-    mov ah, 0x0e
-
-    mov al, 'A'
-    int 0x10
-    mov al, 'u'
-    int 0x10
-    mov al, 'r'
-    int 0x10
-    mov al, 'o'
-    int 0x10
-    mov al, 'r'
-    int 0x10
-    mov al, 'a'
-    int 0x10
+    mov si, logo
+    call print_string
 
 hang:
     jmp hang
+
+print_string:
+.next_char:
+    lodsb
+    cmp al, 0
+    je .done
+
+    mov ah, 0x0e
+    int 0x10
+    jmp .next_char
+
+.done:
+    ret
+
+
+logo db 13,10
+     db "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",13,10
+     db "                                 <3  AuroraOS  <3",13,10
+     db "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",13,10
+     db 13,10
+     db "  Loading kernel...",13,10
+     db "  Starting services...",13,10
+     db 0
 
 times 510-($-$$) db 0
 dw 0xaa55
