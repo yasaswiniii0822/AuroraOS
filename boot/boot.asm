@@ -10,8 +10,25 @@ input_loop:
     mov ah, 0x00
     int 0x16
 
+    cmp al, 13
+    je new_line
+
     mov ah, 0x0e
     int 0x10
+
+    jmp input_loop
+
+
+new_line:
+    mov al, 13
+    mov ah, 0x0e
+    int 0x10
+
+    mov al, 10
+    int 0x10
+
+    mov si, prompt
+    call print_string
 
     jmp input_loop
 
@@ -38,6 +55,6 @@ logo db 13,10
      db "  Starting services...",13,10
      db 13,10
      db "Aurora >",0
-
+prompt db "Aurora >",0
 times 510-($-$$) db 0
 dw 0xaa55
